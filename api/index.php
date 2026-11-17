@@ -3,8 +3,10 @@
 define('LARAVEL_START', microtime(true));
 
 $root = dirname(__DIR__);
+$requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 
-if (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) === '/__vercel_debug') {
+// Pemeriksaan runtime Vercel.
+if ($requestPath === '/__vercel_debug') {
     header('Content-Type: application/json');
 
     echo json_encode([
@@ -16,12 +18,31 @@ if (parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) === '/__vercel_debug
     exit;
 }
 
+// Pemeriksaan log Laravel.
+if ($requestPath === '/__laravel_log') {
+    header('Content-Type: text/plain; charset=utf-8');
+
+    $logFile = '/tmp/laravel-storage/logs/laravel.log';
+
+    if (!file_exists($logFile)) {
+        echo 'FILE LOG BELUM DITEMUKAN';
+        exit;
+    }
+
+    $logContent = file_get_contents($logFile);
+
+    echo substr($logContent, -8000);
+    exit;
+}
+
 // Siapkan direktori sementara untuk Laravel di Vercel.
 $storagePath = '/tmp/laravel-storage';
 
 $directories = [
     $storagePath,
     $storagePath . '/app',
+    $storagePath . '/framework',
+    $storagePath . '/framework/cache',
     $storagePath . '/framework/cache/data',
     $storagePath . '/framework/sessions',
     $storagePath . '/framework/views',
@@ -47,18 +68,7 @@ $app = require_once $root . '/bootstrap/app.php';
 // Arahkan penyimpanan Laravel ke direktori sementara.
 $app->useStoragePath($storagePath);
 
-try {
-    $app->handleRequest(
-        Illuminate\Http\Request::capture()
-    );
-} catch (\Throwable $exception) {
-    error_log(
-        'LARAVEL_VERCEL_ERROR: ' .
-        get_class($exception) . ' - ' .
-        $exception->getMessage()
-    );
-
-    error_log($exception->getTraceAsString());
-
-    throw $exception;
-}
+// Jalankan aplikasi Laravel.
+$app->handleRequest(
+    Illuminate\Http\Request::capture()
+);
