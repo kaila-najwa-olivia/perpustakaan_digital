@@ -31,14 +31,15 @@ if ($requestPath === '/__db_check') {
         ], JSON_PRETTY_PRINT);
 
     } catch (PDOException $e) {
-        http_response_code(500);
+    http_response_code(500);
 
-        echo json_encode([
-            'database_connection' => 'FAILED',
-            'sqlstate' => $e->errorInfo[0] ?? (string) $e->getCode(),
-            'error_type' => get_class($e),
-        ], JSON_PRETTY_PRINT);
-    }
+    echo json_encode([
+        'database_connection' => 'FAILED',
+        'sqlstate' => $e->errorInfo[0] ?? (string) $e->getCode(),
+        'error_type' => get_class($e),
+        'error_detail' => $e->errorInfo[2] ?? $e->getMessage(),
+    ], JSON_PRETTY_PRINT);
+}
 
     exit;
 }
