@@ -5,6 +5,44 @@ define('LARAVEL_START', microtime(true));
 $root = dirname(__DIR__);
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 
+// Pemeriksaan koneksi database Supabase.
+if ($requestPath === '/__db_check') {
+    header('Content-Type: application/json');
+
+    try {
+        $host = getenv('DB_HOST');
+        $port = getenv('DB_PORT') ?: '6543';
+        $database = getenv('DB_DATABASE');
+        $username = getenv('DB_USERNAME');
+        $password = getenv('DB_PASSWORD');
+
+        $dsn = "pgsql:host=$host;port=$port;dbname=$database";
+
+        $pdo = new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_TIMEOUT => 10,
+        ]);
+
+        $result = $pdo->query('SELECT 1')->fetchColumn();
+
+        echo json_encode([
+            'database_connection' => 'SUCCESS',
+            'query_test' => $result == 1 ? 'SUCCESS' : 'FAILED',
+        ], JSON_PRETTY_PRINT);
+
+    } catch (PDOException $e) {
+        http_response_code(500);
+
+        echo json_encode([
+            'database_connection' => 'FAILED',
+            'sqlstate' => $e->errorInfo[0] ?? (string) $e->getCode(),
+            'error_type' => get_class($e),
+        ], JSON_PRETTY_PRINT);
+    }
+
+    exit;
+}
+
 // Pemeriksaan runtime Vercel.
 if ($requestPath === '/__vercel_debug') {
     header('Content-Type: application/json');
