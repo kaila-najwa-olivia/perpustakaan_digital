@@ -1,3 +1,4 @@
+
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "version": 2,
@@ -37,6 +38,8 @@
         "VIEW_COMPILED_PATH": "/tmp/views",
         "CACHE_STORE": "array",
         "SESSION_DRIVER": "cookie",
+        "SESSION_SECURE_COOKIE": "true",
+        "SESSION_SAME_SITE": "lax",
         "LOG_CHANNEL": "stderr",
         "LOG_LEVEL": "debug"
     }
