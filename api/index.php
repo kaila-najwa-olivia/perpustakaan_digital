@@ -16,7 +16,7 @@ if ($requestPath === '/__db_check') {
         $username = getenv('DB_USERNAME');
         $password = getenv('DB_PASSWORD');
 
-        $dsn = "pgsql:host=$host;port=$port;dbname=$database";
+        $dsn = "pgsql:host=$host;port=$port;dbname=$database;sslmode=require";
 
         $pdo = new PDO($dsn, $username, $password, [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
