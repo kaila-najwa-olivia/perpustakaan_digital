@@ -47,7 +47,18 @@ $app = require_once $root . '/bootstrap/app.php';
 // Arahkan penyimpanan Laravel ke direktori sementara.
 $app->useStoragePath($storagePath);
 
-$app->handleRequest(
-    Illuminate\Http\Request::capture()
-);
+try {
+    $app->handleRequest(
+        Illuminate\Http\Request::capture()
+    );
+} catch (\Throwable $exception) {
+    error_log(
+        'LARAVEL_VERCEL_ERROR: ' .
+        get_class($exception) . ' - ' .
+        $exception->getMessage()
+    );
 
+    error_log($exception->getTraceAsString());
+
+    throw $exception;
+}
