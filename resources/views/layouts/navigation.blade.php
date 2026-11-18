@@ -1,25 +1,12 @@
+
 <nav x-data="{ open: false }" class="bg-white border-b border-green-100 shadow-sm">
 
     <style>
-        /* Warna dasar navbar */
         nav {
             border-bottom: 2px solid #dcfce7 !important;
         }
 
-        /* Logo */
-        nav .text-gray-800 {
-            color: #166534 !important;
-        }
-
-        /* Menu desktop */
-        nav a {
-            transition: all 0.2s ease;
-        }
-
-        nav .border-indigo-400 {
-            border-color: #16a34a !important;
-        }
-
+        nav .text-gray-800,
         nav .text-gray-900 {
             color: #166534 !important;
         }
@@ -28,11 +15,18 @@
             color: #4b5563 !important;
         }
 
+        nav a {
+            transition: all 0.2s ease;
+        }
+
+        nav .border-indigo-400 {
+            border-color: #16a34a !important;
+        }
+
         nav a:hover {
             color: #16a34a !important;
         }
 
-        /* Tombol akun */
         nav button {
             transition: all 0.2s ease;
         }
@@ -42,33 +36,40 @@
             background-color: #f0fdf4 !important;
         }
 
-        /* Menu mobile */
         nav .hover\:bg-gray-100:hover {
             background-color: #f0fdf4 !important;
         }
 
-        /* Garis menu mobile */
         nav .border-gray-200 {
             border-color: #dcfce7 !important;
+        }
+
+        .nama-aplikasi {
+            color: #166534;
+            font-size: 17px;
+            font-weight: 700;
+            white-space: nowrap;
         }
     </style>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
 
-            <!-- LOGO -->
-            <div class="flex">
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ auth()->check() ? route('dashboard') : route('login') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-green-700" />
-                    </a>
-                </div>
+            <!-- LOGO DAN NAMA APLIKASI -->
+            <div class="flex items-center gap-3">
+                <a href="{{ auth()->check() ? route('dashboard') : route('login') }}"
+                   class="flex items-center gap-3">
+                    <x-application-logo class="block h-9 w-auto fill-current text-green-700" />
+
+                    <span class="nama-aplikasi">
+                        Perpustakaan - 250441100032
+                    </span>
+                </a>
 
                 <!-- MENU DESKTOP -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-7 sm:flex">
 
                     @auth
-
                         @role('admin')
                             <x-nav-link :href="route('admin')" :active="request()->routeIs('admin')">
                                 Dashboard Admin
@@ -86,7 +87,6 @@
                                 Dashboard Siswa
                             </x-nav-link>
                         @endrole
-
                     @endauth
 
                     @can('lihat-daftar-buku')
@@ -107,7 +107,6 @@
                         </x-nav-link>
                     @endcan
 
-                    <!-- RIWAYAT PEMINJAMAN KHUSUS SISWA -->
                     @role('siswa')
                         @can('melihat-riwayat-peminjaman-sendiri')
                             <x-nav-link :href="route('peminjaman.index')" :active="request()->routeIs('peminjaman.index')">
@@ -130,10 +129,8 @@
 
                 @auth
                     <x-dropdown align="right" width="48">
-
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-green-800 bg-white hover:text-green-700 hover:bg-green-50">
-
                                 <div>{{ Auth::user()->name }}</div>
 
                                 <div class="ms-1">
@@ -141,12 +138,10 @@
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </div>
-
                             </button>
                         </x-slot>
 
                         <x-slot name="content">
-
                             @can('lihat-profil-sendiri')
                                 <x-dropdown-link :href="route('profile.edit')">
                                     Profil Saya
@@ -155,16 +150,13 @@
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-
                                 <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault(); this.closest('form').submit();">
                                     Logout
                                 </x-dropdown-link>
                             </form>
-
                         </x-slot>
                     </x-dropdown>
-
                 @else
                     <a href="{{ route('login') }}" class="text-sm font-semibold text-green-700 hover:text-green-800">
                         Login
@@ -201,10 +193,13 @@
     <!-- MENU MOBILE -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
 
+        <div class="px-4 py-3 font-bold text-green-800 border-b border-green-100">
+            Perpustakaan - 250441100032
+        </div>
+
         <div class="pt-2 pb-3 space-y-1">
 
             @auth
-
                 @role('admin')
                     <x-responsive-nav-link :href="route('admin')">
                         Dashboard Admin
@@ -222,7 +217,6 @@
                         Dashboard Siswa
                     </x-responsive-nav-link>
                 @endrole
-
             @endauth
 
             @can('lihat-daftar-buku')
@@ -243,7 +237,6 @@
                 </x-responsive-nav-link>
             @endcan
 
-            <!-- RIWAYAT PEMINJAMAN KHUSUS SISWA -->
             @role('siswa')
                 @can('melihat-riwayat-peminjaman-sendiri')
                     <x-responsive-nav-link :href="route('peminjaman.index')">
@@ -264,7 +257,6 @@
         <div class="pt-4 pb-1 border-t border-green-100">
 
             @auth
-
                 <div class="px-4">
                     <div class="font-medium text-base text-green-800">
                         {{ Auth::user()->name }}
@@ -276,7 +268,6 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-
                     @can('lihat-profil-sendiri')
                         <x-responsive-nav-link :href="route('profile.edit')">
                             Profil Saya
@@ -285,17 +276,13 @@
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault(); this.closest('form').submit();">
                             Logout
                         </x-responsive-nav-link>
                     </form>
-
                 </div>
-
             @else
-
                 <div class="space-y-1">
                     <x-responsive-nav-link :href="route('login')">
                         Login
@@ -305,7 +292,6 @@
                         Register
                     </x-responsive-nav-link>
                 </div>
-
             @endauth
 
         </div>
