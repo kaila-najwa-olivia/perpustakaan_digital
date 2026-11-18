@@ -128,27 +128,7 @@ $app = require_once $root . '/bootstrap/app.php';
 $app->useStoragePath($storagePath);
 
 // Jalankan aplikasi Laravel.
-// Jalankan aplikasi Laravel, lalu kirim header dan cookie secara manual
-// karena runtime Vercel tidak meneruskan header dari Laravel.
-$request = Illuminate\Http\Request::capture();
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-$response = $kernel->handle($request);
-
-http_response_code($response->getStatusCode());
-
-foreach ($response->headers->allPreserveCase() as $name => $values) {
-    if (strtolower($name) === 'set-cookie') {
-        continue;
-    }
-    foreach ($values as $value) {
-        header($name . ': ' . $value, false);
-    }
-}
-
-foreach ($response->headers->getCookies() as $cookie) {
-    header('Set-Cookie: ' . $cookie, false);
-}
-
-echo $response->getContent();
-
-$kernel->terminate($request, $response);
+// Jalankan aplikasi Laravel.
+$app->handleRequest(
+    Illuminate\Http\Request::capture()
+);
