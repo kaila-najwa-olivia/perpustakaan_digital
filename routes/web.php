@@ -186,5 +186,19 @@ Route::middleware([
         ->name('admin.pengguna.destroy');
 });
 
+Route::get('/tes-sesi', function () {
+    session()->increment('hitung');
+    return [
+        'hitung'         => session('hitung'),
+        'session_id'     => session()->getId(),
+        'session_driver' => config('session.driver'),
+        'session_secure' => config('session.secure'),
+        'session_domain' => config('session.domain'),
+        'cache_store'    => config('cache.default'),
+        'db_connection'  => config('database.default'),
+        'is_secure'      => request()->isSecure(),
+        'host'           => request()->getHost(),
+    ];
+});
 // Autentikasi Breeze
 require __DIR__.'/auth.php';
