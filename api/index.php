@@ -5,6 +5,26 @@ define('LARAVEL_START', microtime(true));
 $root = dirname(__DIR__);
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 
+// Tes apakah runtime Vercel meneruskan header dan cookie.
+if ($requestPath === '/__cookie_test') {
+    header('Content-Type: application/json');
+    header('X-Tes-Header: halo');
+    setcookie('tes_cookie', 'abc123', [
+        'expires'  => time() + 3600,
+        'path'     => '/',
+        'secure'   => true,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+    echo json_encode([
+        'headers_sent' => headers_sent($file, $line),
+        'file' => $file,
+        'line' => $line,
+        'headers_list' => headers_list(),
+    ], JSON_PRETTY_PRINT);
+    exit;
+}
+
 // Pemeriksaan koneksi database Supabase.
 if ($requestPath === '/__db_check') {
     header('Content-Type: application/json');
@@ -31,15 +51,15 @@ if ($requestPath === '/__db_check') {
         ], JSON_PRETTY_PRINT);
 
     } catch (PDOException $e) {
-    http_response_code(500);
+        http_response_code(500);
 
-    echo json_encode([
-        'database_connection' => 'FAILED',
-        'sqlstate' => $e->errorInfo[0] ?? (string) $e->getCode(),
-        'error_type' => get_class($e),
-        'error_detail' => $e->errorInfo[2] ?? $e->getMessage(),
-    ], JSON_PRETTY_PRINT);
-}
+        echo json_encode([
+            'database_connection' => 'FAILED',
+            'sqlstate' => $e->errorInfo[0] ?? (string) $e->getCode(),
+            'error_type' => get_class($e),
+            'error_detail' => $e->errorInfo[2] ?? $e->getMessage(),
+        ], JSON_PRETTY_PRINT);
+    }
 
     exit;
 }
