@@ -200,5 +200,9 @@ Route::get('/tes-sesi', function () {
         'host'           => request()->getHost(),
     ];
 });
+Route::get('/tes-cookie-laravel', function () {
+    return response()->json(['ok' => true])
+        ->cookie('tes_laravel', 'xyz789', 60, '/', null, true, true, false, 'lax');
+});
 // Autentikasi Breeze
 require __DIR__.'/auth.php';
