@@ -129,10 +129,6 @@ $app->useStoragePath($storagePath);
 
 // Jalankan aplikasi Laravel.
 // Jalankan aplikasi Laravel.
-$request = Illuminate\Http\Request::capture();
-
-$response = $app->handle($request);
-
-$response->send();
-
-$app->terminate($request, $response);
+$app->handleRequest(
+    Illuminate\Http\Request::capture()
+);
