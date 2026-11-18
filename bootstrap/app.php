@@ -21,8 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
                      Request::HEADER_X_FORWARDED_PROTO
         );
 
-        // Kirim ulang cookie Laravel lewat header() PHP (workaround runtime Vercel).
-        $middleware->append(\App\Http\Middleware\ForceSendCookies::class);
 
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
