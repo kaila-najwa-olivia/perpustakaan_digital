@@ -43,13 +43,6 @@
         nav .border-gray-200 {
             border-color: #dcfce7 !important;
         }
-
-        .nama-aplikasi {
-            color: #166534;
-            font-size: 17px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
     </style>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,12 +51,8 @@
             <!-- LOGO DAN NAMA APLIKASI -->
             <div class="flex items-center gap-3">
                 <a href="{{ auth()->check() ? route('dashboard') : route('login') }}"
-                   class="flex items-center gap-3">
+                   class="flex items-center">
                     <x-application-logo class="block h-9 w-auto fill-current text-green-700" />
-
-                    <span class="nama-aplikasi">
-                        Perpustakaan - 250441100032
-                    </span>
                 </a>
 
                 <!-- MENU DESKTOP -->
@@ -192,10 +181,6 @@
 
     <!-- MENU MOBILE -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-
-        <div class="px-4 py-3 font-bold text-green-800 border-b border-green-100">
-            Perpustakaan - 250441100032
-        </div>
 
         <div class="pt-2 pb-3 space-y-1">
 
