@@ -186,20 +186,6 @@ Route::middleware([
         ->name('admin.pengguna.destroy');
 });
 
-Route::get('/tes-sesi', function () {
-    session()->increment('hitung');
-    return [
-        'hitung'         => session('hitung'),
-        'session_id'     => session()->getId(),
-        'session_driver' => config('session.driver'),
-        'session_secure' => config('session.secure'),
-        'session_domain' => config('session.domain'),
-        'cache_store'    => config('cache.default'),
-        'db_connection'  => config('database.default'),
-        'is_secure'      => request()->isSecure(),
-        'host'           => request()->getHost(),
-    ];
-});
 Route::get('/tes-cookie-laravel', function () {
     return response()->json(['ok' => true])
         ->cookie('tes_laravel', 'xyz789', 60, '/', null, true, true, false, 'lax');
