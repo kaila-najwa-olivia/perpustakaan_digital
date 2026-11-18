@@ -42,10 +42,10 @@
                 di perpustakaan kami.
             </p>
 
-            <a href="{{ route('buku.index') }}"
-               class="inline-block bg-green-600 text-white px-8 py-3
-                      rounded-xl font-semibold shadow-lg
-                      hover:bg-green-700 transition">
+            <a href="{{ auth()->check() ? route('buku.index') : route('login') }}"
+                class="inline-block bg-green-600 text-white px-8 py-3
+                rounded-xl font-semibold shadow-lg
+                hover:bg-green-700 transition">
                 Lihat Daftar Buku
             </a>
 
