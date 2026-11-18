@@ -1,11 +1,10 @@
-
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "version": 2,
     "outputDirectory": "public",
     "regions": ["sin1"],
     "functions": {
-        "api/*.php": {
+        "api/index.php": {
             "runtime": "vercel-php@0.8.0"
         }
     },
@@ -36,9 +35,10 @@
         "APP_ROUTES_CACHE": "/tmp/routes.php",
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "VIEW_COMPILED_PATH": "/tmp/views",
+        "CACHE_STORE": "array",
+        "SESSION_DRIVER": "cookie",
         "SESSION_SECURE_COOKIE": "true",
         "SESSION_SAME_SITE": "lax",
-        "LOG_CHANNEL": "stderr",
-        "LOG_LEVEL": "debug"
+        "LOG_CHANNEL": "stderr"
     }
 }
